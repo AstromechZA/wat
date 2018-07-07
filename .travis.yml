@@ -35,7 +35,7 @@ install: # install specific versions of elm & elm-test
 script:
   - elm-format --validate
   - mkdir output
-  - elm-make bytes.elm output/index.html
+  - elm-make bytes.elm --output output/index.html
 
 deploy:
   provider: pages
