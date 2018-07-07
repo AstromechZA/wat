@@ -34,4 +34,15 @@ install: # install specific versions of elm & elm-test
 
 script:
   - elm-format --validate
-  - elm-test --verbose
+  - mkdir output
+  - elm-make bytes.elm output/index.html
+
+deploy:
+  provider: pages
+  local-dir: output
+  target-branch: gh-pages
+  skip-cleanup: true
+  github-token: $GITHUB_TOKEN  # Set in the settings page of your repository, as a secure variable
+  keep-history: true
+  on:
+    branch: master
