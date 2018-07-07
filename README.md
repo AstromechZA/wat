@@ -27,3 +27,7 @@ I'd like to build `wat` with:
 - Precompilation to Javascript using Travis (build `master` -> `gh-pages`)
 - Elm-lang source
 - **Minimal** third-party run-time libraries
+
+## Why is wat built with elm-lang?
+
+Because `elm-lang` is interesting. Thats all :)
