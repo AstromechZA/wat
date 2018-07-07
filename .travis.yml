@@ -42,7 +42,8 @@ deploy:
   local-dir: output
   target-branch: gh-pages
   skip-cleanup: true
-  github-token: $GITHUB_TOKEN  # Set in the settings page of your repository, as a secure variable
+  github-token: 
+    secure: "kvSEjGFQLm8P+MjnRsn536Hi1Qsdsv7K2libk65JdS4VjEOZwv9rnpdFDf7LD7W9LIHAxDDZ19FkN8yDiuwgrLFsctbR8glba9isTPlvRHIJ75KmOetgzJWyntMFiJQcDVfd5nZDEsnJXvZOHPEp/I79oIC82MwOQDvaLr6Y9Kqe6OaMXeabkoTswhFWd2CE8EaiextM4UFeigdNPTsRUkmq6ofgAgSQ5EXqRSy83hu0pGAkNEwcRn9KE/d5x72neF2N3ZJfgPc8xjhUoc+acNhGBxQ6iEkLRPfsLF0+2cA/WzsC7EYrnKAN2pUG1KkwWS3Uluyd2TayMj2ja7DRZwLEcdzoetG2dzN+GtHJexwHDzeC9fEDJE1pabUx85M8MA77HfWKxfYn3fMEA4dwunlptg+5tRH14+M7JmWtQdg1fGr7Pg4G/8kGAi6Na5eKXW6rc52/DtUIwirs12QXOPwL98clLTE8JnNqR/7BCcBGu6KGyztEHZ4aII2Bx8ejvAyRxb6Qogadenaa+foiMIxwgdO18P6gJ+fmEADaYgo3ebkY6C0pF6Eh6k7BdlTSRGTBfAWP0+7ojJKPkCctwPiSCRm/Re1mV90w74AE0PBQ2tO4iBEAbvnOOcBRHeVgTGoJ2b8AZADjUCLoxzxyVlWqur9FmBCDeiSnVf0xyY8="
   keep-history: true
   on:
     branch: master
