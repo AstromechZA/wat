@@ -1,6 +1,6 @@
 .PHONY: test
 test: 
-	elm-format --validate
+	elm-format --validate *.elm
 
 .PHONY: clean
 clean: 
@@ -9,7 +9,7 @@ clean:
 .PHONY: build
 build: clean
 	mkdir output
-	cp -r static/* output
+	cp -r static/* output/
 	elm-make bytes.elm --output static/bytes.html
 
 .PHONY: all
