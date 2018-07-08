@@ -2,7 +2,8 @@ language: node_js # elm is installed from npm (see install below)
 node_js: node     # use "latest" version of Node.js
 
 env:
-  - ELM_VERSION=0.18.0 ELM_TEST=0.18.12
+  - ELM_VERSION=0.18.0 
+  - ELM_TEST=0.18.12
 
 cache:
   directories: # so subsequent builds run faster
@@ -33,9 +34,7 @@ install: # install specific versions of elm & elm-test
   - travis_retry elm package install --yes # install main project dependencies
 
 script:
-  - elm-format --validate
-  - mkdir output
-  - elm-make bytes.elm --output output/index.html
+  - make
 
 deploy:
   provider: pages
