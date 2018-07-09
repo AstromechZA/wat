@@ -10,7 +10,8 @@ clean:
 build: clean
 	mkdir output
 	cp -r static/* output/
-	elm-make bytes.elm --output output/bytes.html
+	elm-make bytes.elm --output output/bytes.js
+	elm-make jsonformat.elm --output output/jsonformat.js
 
 .PHONY: all
 all: test build 
