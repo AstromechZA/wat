@@ -31,3 +31,13 @@ I'd like to build `wat` with:
 ## Why is wat built with elm-lang?
 
 Because `elm-lang` is interesting. Thats all :)
+
+## Development
+
+```
+$ npm install -g elm
+$ npm install -g elm-format
+$ make
+```
+
+http://package.elm-lang.org/packages/Microsoft/elm-json-tree-view/latest

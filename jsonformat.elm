@@ -1,3 +1,5 @@
+module Main exposing (..)
+
 import Html exposing (Html, div, input, text, button, pre)
 import Html.Attributes exposing (..)
 import Html.Events exposing (onInput, onClick)
@@ -5,23 +7,28 @@ import Html
 import Json.Decode
 import Dict exposing (Dict)
 
+
 main : Program Never Model Msg
 main =
-  Html.beginnerProgram
-    { model = model, view = view, update = update}
+    Html.beginnerProgram
+        { model = model, view = view, update = update }
+
 
 type alias Model =
-  { 
-      rawData : String,
-      formattedData : String 
-  }
+    { rawData : String
+    , formattedData : String
+    }
+
 
 model : Model
 model =
-  Model "{}" "{}"
+    Model "{}" "{}"
+
 
 type Msg
-  = Change String | Reset
+    = Change String
+    | Reset
+
 
 type InternalJson
     = JsonString String
@@ -41,14 +48,16 @@ decodeToInternalJson =
         , Json.Decode.map JsonList (Json.Decode.lazy (\_ -> (Json.Decode.list decodeToInternalJson)))
         ]
 
-stringify : String -> String 
-stringify value =
-    case Json.Decode.decodeString decodeToInternalJson value of 
-        Err e ->
-            e 
 
-        Ok v -> 
+stringify : String -> String
+stringify value =
+    case Json.Decode.decodeString decodeToInternalJson value of
+        Err e ->
+            e
+
+        Ok v ->
             internalJsonToString "" "  " v
+
 
 internalJsonToString : String -> String -> InternalJson -> String
 internalJsonToString pad pad2 json =
@@ -72,35 +81,37 @@ internalJsonToString pad pad2 json =
                 |> (\x -> "{\n" ++ x ++ "\n" ++ pad ++ "}")
 
         JsonList list ->
-            List.map (internalJsonToString pad2 (pad2 ++ "  ")) list 
+            List.map (internalJsonToString pad2 (pad2 ++ "  ")) list
                 |> List.map (\x -> (pad2 ++ x))
                 |> String.join ",\n"
                 |> (\x -> "[\n" ++ x ++ "\n" ++ pad ++ "]")
 
+
 update : Msg -> Model -> Model
 update msg model =
-  case msg of
-    Change newData ->
-      
-      { model | 
-        rawData = newData,
-        formattedData = (stringify newData)
-      }
-    Reset -> 
-      { model | 
-        rawData = "{}",
-        formattedData = "{}"
-      }
+    case msg of
+        Change newData ->
+            { model
+                | rawData = newData
+                , formattedData = (stringify newData)
+            }
+
+        Reset ->
+            { model
+                | rawData = "{}"
+                , formattedData = "{}"
+            }
+
 
 view : Model -> Html Msg
 view model =
-  div []
-    [ 
-        input [ 
-            placeholder "Json Content", 
-            onInput Change,
-            value model.rawData
-        ] [], 
-        pre [] [ Html.text model.formattedData ],
-        button [ onClick Reset ] [ text "reset"]
-    ]
+    div []
+        [ input
+            [ placeholder "Json Content"
+            , onInput Change
+            , value model.rawData
+            ]
+            []
+        , pre [] [ Html.text model.formattedData ]
+        , button [ onClick Reset ] [ text "reset" ]
+        ]
