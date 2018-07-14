@@ -11,6 +11,12 @@ import Basics
 import Bitwise
 
 
+type alias CIDR =
+    { anchorIP : Int
+    , maskShorthand : Int
+    }
+
+
 parseIpSegment : String -> Result String Int
 parseIpSegment i =
     case String.toInt i of
@@ -83,8 +89,8 @@ ipStringToInt i =
 -- convert subnet like 1.2.3.4/32 into ip int and subnet int
 
 
-subnetStringToIntPair : String -> Result String ( Int, Int )
-subnetStringToIntPair i =
+subnetStringToCIDR : String -> Result String CIDR
+subnetStringToCIDR i =
     let
         parts =
             String.split "/" i
@@ -108,20 +114,18 @@ subnetStringToIntPair i =
                         |> Maybe.withDefault ""
                         |> String.toInt
             in
-                case ipResult of
-                    Err e ->
+                case ( ipResult, netResult ) of
+                    ( Ok r, Ok s ) ->
+                        if s >= 0 && s <= 32 then
+                            Ok (CIDR r s)
+                        else
+                            Err "mask value is out of range 0-32"
+
+                    ( Err e, _ ) ->
                         Err ("could not parse ip value: " ++ e)
 
-                    Ok r ->
-                        case netResult of
-                            Err e ->
-                                Err ("could not parse mask value: " ++ e)
-
-                            Ok s ->
-                                if s >= 0 && s <= 32 then
-                                    Ok ( r, s )
-                                else
-                                    Err "mask value is out of range 0-32"
+                    ( _, Err e ) ->
+                        Err ("could not parse mask value: " ++ e)
 
 
 ipIntToString : Int -> Result String String
@@ -130,11 +134,40 @@ ipIntToString i =
         Err "out of range"
     else
         List.range 0 3
-        |> List.map (\x -> (Bitwise.shiftRightZfBy (x * 8) i) % 256)
-        |> List.reverse 
-        |> List.map Basics.toString 
-        |> String.join "."
-        |> Ok 
+            |> List.map (\x -> (Bitwise.shiftRightZfBy (x * 8) i) % 256)
+            |> List.reverse
+            |> List.map Basics.toString
+            |> String.join "."
+            |> Ok
+
+
+maskShorthandToMaskInt : Int -> Int
+maskShorthandToMaskInt i =
+    4294967295 - ((2 ^ (32 - i)) - 1)
+
+
+maskShorthandToSize : Int -> Int
+maskShorthandToSize i =
+    2 ^ (32 - i)
+
+
+cidrToLowerBound : CIDR -> Int
+cidrToLowerBound c =
+    Bitwise.and c.anchorIP (maskShorthandToMaskInt c.maskShorthand)
+
+
+cidrToUpperBound : CIDR -> Int
+cidrToUpperBound c =
+    (cidrToLowerBound c) + (cidrToNumAddresses c)
+
+
+cidrToNumAddresses : CIDR -> Int
+cidrToNumAddresses c =
+    maskShorthandToSize c.maskShorthand
+
+
+
+--Bitwise.and (Bitwise.shiftLeftBy (32 - i) 4294967295) 4294967295
 
 
 main : Program Never Model Msg
@@ -177,12 +210,24 @@ view model =
             ]
             []
         , div []
-            [ case subnetStringToIntPair model.rawData of
+            [ case subnetStringToCIDR model.rawData of
                 Err e ->
                     text ("Error: " ++ e)
 
-                Ok ( i, s ) ->
-                    text ((Basics.toString i) ++ " " ++ (Basics.toString s) ++ " " ++ (Result.withDefault "" (ipIntToString i)))
+                Ok c ->
+                    text
+                        ((Basics.toString c.anchorIP)
+                            ++ " "
+                            ++ (Basics.toString (ipIntToString (maskShorthandToMaskInt c.maskShorthand)))
+                            ++ " "
+                            ++ (Basics.toString (ipIntToString c.anchorIP))
+                            ++ " "
+                            ++ (Basics.toString (ipIntToString (cidrToLowerBound c)))
+                            ++ " "
+                            ++ (Basics.toString (ipIntToString (cidrToUpperBound c)))
+                            ++ " "
+                            ++ (Basics.toString (cidrToNumAddresses c))
+                        )
             ]
         , button [ onClick Reset ] [ text "reset" ]
         ]
