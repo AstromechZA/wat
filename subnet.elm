@@ -8,13 +8,14 @@ import String
 import Result
 import List
 import Basics
+import Bitwise
 
 
 parseIpSegment : String -> Result String Int
 parseIpSegment i =
     case String.toInt i of
         Err e ->
-            Err "segment is not a valid integer"
+            Err e
 
         Ok v ->
             if 0 <= v && v <= 255 then
@@ -31,6 +32,10 @@ isError ( i, r ) =
 
         Ok _ ->
             False
+
+
+
+-- convert ip like 1.2.3.4 into the 32bit int
 
 
 ipStringToInt : String -> Result String Int
@@ -74,6 +79,64 @@ ipStringToInt i =
                         |> Ok
 
 
+
+-- convert subnet like 1.2.3.4/32 into ip int and subnet int
+
+
+subnetStringToIntPair : String -> Result String ( Int, Int )
+subnetStringToIntPair i =
+    let
+        parts =
+            String.split "/" i
+
+        numParts =
+            List.length parts
+    in
+        if numParts /= 2 then
+            Err "must contain exactly one /"
+        else
+            let
+                ipResult =
+                    List.head parts
+                        |> Maybe.withDefault ""
+                        |> ipStringToInt
+
+                netResult =
+                    List.tail parts
+                        |> Maybe.withDefault []
+                        |> List.head
+                        |> Maybe.withDefault ""
+                        |> String.toInt
+            in
+                case ipResult of
+                    Err e ->
+                        Err ("could not parse ip value: " ++ e)
+
+                    Ok r ->
+                        case netResult of
+                            Err e ->
+                                Err ("could not parse mask value: " ++ e)
+
+                            Ok s ->
+                                if s >= 0 && s <= 32 then
+                                    Ok ( r, s )
+                                else
+                                    Err "mask value is out of range 0-32"
+
+
+ipIntToString : Int -> Result String String
+ipIntToString i =
+    if i < 0 || i > 4294967295 then
+        Err "out of range"
+    else
+        List.range 0 3
+        |> List.map (\x -> (Bitwise.shiftRightZfBy (x * 8) i) % 256)
+        |> List.reverse 
+        |> List.map Basics.toString 
+        |> String.join "."
+        |> Ok 
+
+
 main : Program Never Model Msg
 main =
     Html.beginnerProgram
@@ -114,12 +177,12 @@ view model =
             ]
             []
         , div []
-            [ case ipStringToInt model.rawData of
+            [ case subnetStringToIntPair model.rawData of
                 Err e ->
                     text ("Error: " ++ e)
 
-                Ok i ->
-                    text (Basics.toString i)
+                Ok ( i, s ) ->
+                    text ((Basics.toString i) ++ " " ++ (Basics.toString s) ++ " " ++ (Result.withDefault "" (ipIntToString i)))
             ]
         , button [ onClick Reset ] [ text "reset" ]
         ]
