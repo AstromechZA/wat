@@ -3,7 +3,7 @@ all: test build
 
 .PHONY: format
 format: 
-	elm-format --yes *.elm tests/*.elm
+	elm-format --yes *.elm
 
 .PHONY: test
 test: 
