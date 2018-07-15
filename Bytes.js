@@ -8260,6 +8260,31 @@ var _elm_lang$html$Html_Events$Options = F2(
 		return {stopPropagation: a, preventDefault: b};
 	});
 
+var _user$project$Main$round = F2(
+	function (d, v) {
+		var x = _elm_lang$core$Basics$toFloat(
+			Math.pow(10, d));
+		return _elm_lang$core$Basics$toFloat(
+			_elm_lang$core$Basics$round(v * x)) / x;
+	});
+var _user$project$Main$fmtMetric = F2(
+	function (z, i) {
+		return _elm_lang$core$Basics$toString(
+			A2(
+				_user$project$Main$round,
+				4,
+				i / _elm_lang$core$Basics$toFloat(
+					Math.pow(1000, z))));
+	});
+var _user$project$Main$fmtISO = F2(
+	function (z, i) {
+		return _elm_lang$core$Basics$toString(
+			A2(
+				_user$project$Main$round,
+				4,
+				i / _elm_lang$core$Basics$toFloat(
+					Math.pow(1024, z))));
+	});
 var _user$project$Main$update = F2(
 	function (msg, model) {
 		var _p0 = msg;
@@ -8273,7 +8298,7 @@ var _user$project$Main$update = F2(
 						_elm_lang$core$Maybe$withDefault,
 						0,
 						_elm_lang$core$Result$toMaybe(
-							_elm_lang$core$String$toInt(
+							_elm_lang$core$String$toFloat(
 								_elm_lang$core$String$toLower(_p1))))
 				});
 		} else {
@@ -8323,7 +8348,7 @@ var _user$project$Main$view = function (model) {
 						_0: _elm_lang$html$Html$text(
 							A2(
 								_elm_lang$core$Basics_ops['++'],
-								_elm_lang$core$Basics$toString(model.bytes),
+								A2(_user$project$Main$fmtMetric, 0, model.bytes),
 								' B')),
 						_1: {ctor: '[]'}
 					}),
@@ -8337,8 +8362,7 @@ var _user$project$Main$view = function (model) {
 							_0: _elm_lang$html$Html$text(
 								A2(
 									_elm_lang$core$Basics_ops['++'],
-									_elm_lang$core$Basics$toString(
-										(model.bytes / Math.pow(1000, 1)) | 0),
+									A2(_user$project$Main$fmtMetric, 1, model.bytes),
 									' KB')),
 							_1: {ctor: '[]'}
 						}),
@@ -8352,8 +8376,7 @@ var _user$project$Main$view = function (model) {
 								_0: _elm_lang$html$Html$text(
 									A2(
 										_elm_lang$core$Basics_ops['++'],
-										_elm_lang$core$Basics$toString(
-											(model.bytes / Math.pow(1024, 1)) | 0),
+										A2(_user$project$Main$fmtISO, 1, model.bytes),
 										' KiB')),
 								_1: {ctor: '[]'}
 							}),
@@ -8367,8 +8390,7 @@ var _user$project$Main$view = function (model) {
 									_0: _elm_lang$html$Html$text(
 										A2(
 											_elm_lang$core$Basics_ops['++'],
-											_elm_lang$core$Basics$toString(
-												(model.bytes / Math.pow(1000, 2)) | 0),
+											A2(_user$project$Main$fmtMetric, 2, model.bytes),
 											' MB')),
 									_1: {ctor: '[]'}
 								}),
@@ -8382,8 +8404,7 @@ var _user$project$Main$view = function (model) {
 										_0: _elm_lang$html$Html$text(
 											A2(
 												_elm_lang$core$Basics_ops['++'],
-												_elm_lang$core$Basics$toString(
-													(model.bytes / Math.pow(1024, 2)) | 0),
+												A2(_user$project$Main$fmtISO, 2, model.bytes),
 												' MiB')),
 										_1: {ctor: '[]'}
 									}),
@@ -8397,8 +8418,7 @@ var _user$project$Main$view = function (model) {
 											_0: _elm_lang$html$Html$text(
 												A2(
 													_elm_lang$core$Basics_ops['++'],
-													_elm_lang$core$Basics$toString(
-														(model.bytes / Math.pow(1000, 3)) | 0),
+													A2(_user$project$Main$fmtMetric, 3, model.bytes),
 													' GB')),
 											_1: {ctor: '[]'}
 										}),
@@ -8412,8 +8432,7 @@ var _user$project$Main$view = function (model) {
 												_0: _elm_lang$html$Html$text(
 													A2(
 														_elm_lang$core$Basics_ops['++'],
-														_elm_lang$core$Basics$toString(
-															(model.bytes / Math.pow(1024, 3)) | 0),
+														A2(_user$project$Main$fmtISO, 3, model.bytes),
 														' GiB')),
 												_1: {ctor: '[]'}
 											}),
@@ -8427,8 +8446,7 @@ var _user$project$Main$view = function (model) {
 													_0: _elm_lang$html$Html$text(
 														A2(
 															_elm_lang$core$Basics_ops['++'],
-															_elm_lang$core$Basics$toString(
-																(model.bytes / Math.pow(1000, 4)) | 0),
+															A2(_user$project$Main$fmtMetric, 4, model.bytes),
 															' TB')),
 													_1: {ctor: '[]'}
 												}),
@@ -8442,8 +8460,7 @@ var _user$project$Main$view = function (model) {
 														_0: _elm_lang$html$Html$text(
 															A2(
 																_elm_lang$core$Basics_ops['++'],
-																_elm_lang$core$Basics$toString(
-																	(model.bytes / Math.pow(1024, 4)) | 0),
+																A2(_user$project$Main$fmtISO, 4, model.bytes),
 																' TiB')),
 														_1: {ctor: '[]'}
 													}),
