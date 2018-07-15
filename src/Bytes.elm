@@ -4,6 +4,7 @@ import Html exposing (Html, div, input, text, button)
 import Html.Attributes exposing (..)
 import Html.Events exposing (onInput, onClick)
 import String
+import Basics
 
 
 main : Program Never Model Msg
@@ -14,7 +15,7 @@ main =
 
 type alias Model =
     { rawData : String
-    , bytes : Int
+    , bytes : Float
     }
 
 
@@ -34,7 +35,10 @@ update msg model =
         Change newData ->
             { model
                 | rawData = newData
-                , bytes = (String.toInt (String.toLower newData)) |> Result.toMaybe |> Maybe.withDefault 0
+                , bytes = String.toLower newData
+                  |> String.toFloat 
+                  |> Result.toMaybe 
+                  |> Maybe.withDefault 0
             }
 
         Reset ->
@@ -42,6 +46,27 @@ update msg model =
                 | rawData = "0"
                 , bytes = 0
             }
+
+round : Int -> Float -> Float 
+round d v = 
+    let 
+        x = toFloat (10 ^ d)
+    in
+        (toFloat (Basics.round (v * x))) / x
+
+
+fmtMetric : Int -> Float -> String 
+fmtMetric z i =
+    i / (toFloat (1000 ^ z))
+    |> round 4 
+    |> toString
+
+
+fmtISO : Int -> Float -> String 
+fmtISO z i =
+    i / (toFloat (1024 ^ z))
+    |> round 4 
+    |> toString
 
 
 view : Model -> Html Msg
@@ -53,14 +78,14 @@ view model =
             , value model.rawData
             ]
             []
-        , div [] [ text ((toString model.bytes) ++ " B") ]
-        , div [] [ text ((toString (model.bytes // (1000 ^ 1))) ++ " KB") ]
-        , div [] [ text ((toString (model.bytes // (1024 ^ 1))) ++ " KiB") ]
-        , div [] [ text ((toString (model.bytes // (1000 ^ 2))) ++ " MB") ]
-        , div [] [ text ((toString (model.bytes // (1024 ^ 2))) ++ " MiB") ]
-        , div [] [ text ((toString (model.bytes // (1000 ^ 3))) ++ " GB") ]
-        , div [] [ text ((toString (model.bytes // (1024 ^ 3))) ++ " GiB") ]
-        , div [] [ text ((toString (model.bytes // (1000 ^ 4))) ++ " TB") ]
-        , div [] [ text ((toString (model.bytes // (1024 ^ 4))) ++ " TiB") ]
+        , div [] [ text ((fmtMetric 0 model.bytes) ++ " B") ]
+        , div [] [ text ((fmtMetric 1 model.bytes) ++ " KB") ]
+        , div [] [ text ((fmtISO 1 model.bytes) ++ " KiB") ]
+        , div [] [ text ((fmtMetric 2 model.bytes) ++ " MB") ]
+        , div [] [ text ((fmtISO 2 model.bytes) ++ " MiB") ]
+        , div [] [ text ((fmtMetric 3 model.bytes) ++ " GB") ]
+        , div [] [ text ((fmtISO 3 model.bytes) ++ " GiB") ]
+        , div [] [ text ((fmtMetric 4 model.bytes) ++ " TB") ]
+        , div [] [ text ((fmtISO 4 model.bytes) ++ " TiB") ]
         , button [ onClick Reset ] [ text "reset" ]
         ]
