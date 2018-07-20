@@ -204,7 +204,7 @@ view : Model -> Html Msg
 view model =
     div []
         [ input
-            [ placeholder "IP address"
+            [ placeholder "1.2.3.4/24"
             , onInput Change
             , value model.rawData
             ]

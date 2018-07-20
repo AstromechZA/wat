@@ -35,10 +35,11 @@ update msg model =
         Change newData ->
             { model
                 | rawData = newData
-                , bytes = String.toLower newData
-                  |> String.toFloat 
-                  |> Result.toMaybe 
-                  |> Maybe.withDefault 0
+                , bytes =
+                    String.toLower newData
+                        |> String.toFloat
+                        |> Result.toMaybe
+                        |> Maybe.withDefault 0
             }
 
         Reset ->
@@ -47,26 +48,30 @@ update msg model =
                 , bytes = 0
             }
 
-round : Int -> Float -> Float 
-round d v = 
-    let 
-        x = toFloat (10 ^ d)
+
+round : Int -> Float -> Float
+round d v =
+    let
+        x =
+            toFloat (10 ^ d)
     in
         (toFloat (Basics.round (v * x))) / x
 
 
-fmtMetric : Int -> Float -> String 
+fmtMetric : Int -> Float -> String
 fmtMetric z i =
-    i / (toFloat (1000 ^ z))
-    |> round 4 
-    |> toString
+    i
+        / (toFloat (1000 ^ z))
+        |> round 4
+        |> toString
 
 
-fmtISO : Int -> Float -> String 
+fmtISO : Int -> Float -> String
 fmtISO z i =
-    i / (toFloat (1024 ^ z))
-    |> round 4 
-    |> toString
+    i
+        / (toFloat (1024 ^ z))
+        |> round 4
+        |> toString
 
 
 view : Model -> Html Msg

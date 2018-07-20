@@ -112,6 +112,6 @@ view model =
             , value model.rawData
             ]
             []
-        , pre [] [ Html.text model.formattedData ]
+        , pre [ id "json_result_box" ] [ Html.text model.formattedData ]
         , button [ onClick Reset ] [ text "reset" ]
         ]

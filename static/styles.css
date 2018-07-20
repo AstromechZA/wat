@@ -1,0 +1,7 @@
+pre {
+    padding-left: 1rem;
+}
+
+#json_result_box {
+    white-space: pre-line;
+}
