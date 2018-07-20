@@ -8467,7 +8467,7 @@ var _user$project$Main$view = function (model) {
 				_elm_lang$html$Html$input,
 				{
 					ctor: '::',
-					_0: _elm_lang$html$Html_Attributes$placeholder('IP address'),
+					_0: _elm_lang$html$Html_Attributes$placeholder('1.2.3.4/24'),
 					_1: {
 						ctor: '::',
 						_0: _elm_lang$html$Html_Events$onInput(_user$project$Main$Change),

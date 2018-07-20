@@ -8377,7 +8377,11 @@ var _user$project$Main$view = function (model) {
 				ctor: '::',
 				_0: A2(
 					_elm_lang$html$Html$pre,
-					{ctor: '[]'},
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$id('json_result_box'),
+						_1: {ctor: '[]'}
+					},
 					{
 						ctor: '::',
 						_0: _elm_lang$html$Html$text(model.formattedData),
