@@ -1,9 +1,8 @@
 module Main exposing (..)
 
-import Html exposing (Html, div, input, text, button)
 import Html.Attributes exposing (..)
 import Html.Events exposing (onInput, onClick)
-import Html exposing (Html, div, input, text, button)
+import Html exposing (Html, div, input, text, button, table, tr, td, th, code)
 import String
 import Result
 import List
@@ -166,10 +165,6 @@ cidrToNumAddresses c =
     maskShorthandToSize c.maskShorthand
 
 
-
---Bitwise.and (Bitwise.shiftLeftBy (32 - i) 4294967295) 4294967295
-
-
 main : Program Never Model Msg
 main =
     Html.beginnerProgram
@@ -177,12 +172,14 @@ main =
 
 
 type alias Model =
-    { rawData : String }
+    { rawData : String
+    , result : Result String CIDR
+    }
 
 
 model : Model
 model =
-    Model ""
+    Model "" (Err "No input provided")
 
 
 type Msg
@@ -194,10 +191,10 @@ update : Msg -> Model -> Model
 update msg model =
     case msg of
         Change newData ->
-            { model | rawData = newData }
+            { model | rawData = newData, result = subnetStringToCIDR newData }
 
         Reset ->
-            { model | rawData = "" }
+            { model | rawData = "", result = Err "No input provided" }
 
 
 view : Model -> Html Msg
@@ -210,24 +207,58 @@ view model =
             ]
             []
         , div []
-            [ case subnetStringToCIDR model.rawData of
-                Err e ->
-                    text ("Error: " ++ e)
+            [ table []
+                (case model.result of
+                    Err e ->
+                        [ tr []
+                            [ th [] [ text "Error" ]
+                            , td [] [ text e ]
+                            ]
+                        ]
 
-                Ok c ->
-                    text
-                        ((Basics.toString c.anchorIP)
-                            ++ " "
-                            ++ (Basics.toString (ipIntToString (maskShorthandToMaskInt c.maskShorthand)))
-                            ++ " "
-                            ++ (Basics.toString (ipIntToString c.anchorIP))
-                            ++ " "
-                            ++ (Basics.toString (ipIntToString (cidrToLowerBound c)))
-                            ++ " "
-                            ++ (Basics.toString (ipIntToString (cidrToUpperBound c)))
-                            ++ " "
-                            ++ (Basics.toString (cidrToNumAddresses c))
-                        )
+                    Ok c ->
+                        [ tr []
+                            [ th []
+                                [ text "IP Address"
+                                ]
+                            , td []
+                                [ code [] [ text (Result.withDefault "" (ipIntToString c.anchorIP)) ]
+                                ]
+                            ]
+                        , tr []
+                            [ th []
+                                [ text "Subnet Mask"
+                                ]
+                            , td []
+                                [ code [] [ text (Result.withDefault "" (ipIntToString (maskShorthandToMaskInt c.maskShorthand))) ]
+                                ]
+                            ]
+                        , tr []
+                            [ th []
+                                [ text "Number of addresses"
+                                ]
+                            , td []
+                                [ code [] [ text (Basics.toString (cidrToNumAddresses c)) ]
+                                ]
+                            ]
+                        , tr []
+                            [ th []
+                                [ text "Lower IP"
+                                ]
+                            , td []
+                                [ code [] [ text (Basics.toString (ipIntToString (cidrToLowerBound c))) ]
+                                ]
+                            ]
+                        , tr []
+                            [ th []
+                                [ text "Upper IP"
+                                ]
+                            , td []
+                                [ code [] [ text (Result.withDefault "" (ipIntToString (cidrToUpperBound c))) ]
+                                ]
+                            ]
+                        ]
+                )
             ]
         , button [ onClick Reset ] [ text "reset" ]
         ]
