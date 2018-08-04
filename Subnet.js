@@ -8282,19 +8282,6 @@ var _elm_lang$html$Html_Events$Options = F2(
 		return {stopPropagation: a, preventDefault: b};
 	});
 
-var _user$project$Main$update = F2(
-	function (msg, model) {
-		var _p0 = msg;
-		if (_p0.ctor === 'Change') {
-			return _elm_lang$core$Native_Utils.update(
-				model,
-				{rawData: _p0._0});
-		} else {
-			return _elm_lang$core$Native_Utils.update(
-				model,
-				{rawData: ''});
-		}
-	});
 var _user$project$Main$maskShorthandToSize = function (i) {
 	return Math.pow(2, 32 - i);
 };
@@ -8326,22 +8313,22 @@ var _user$project$Main$ipIntToString = function (i) {
 						},
 						A2(_elm_lang$core$List$range, 0, 3))))));
 };
-var _user$project$Main$isError = function (_p1) {
-	var _p2 = _p1;
-	var _p3 = _p2._1;
-	if (_p3.ctor === 'Err') {
+var _user$project$Main$isError = function (_p0) {
+	var _p1 = _p0;
+	var _p2 = _p1._1;
+	if (_p2.ctor === 'Err') {
 		return true;
 	} else {
 		return false;
 	}
 };
 var _user$project$Main$parseIpSegment = function (i) {
-	var _p4 = _elm_lang$core$String$toInt(i);
-	if (_p4.ctor === 'Err') {
-		return _elm_lang$core$Result$Err(_p4._0);
+	var _p3 = _elm_lang$core$String$toInt(i);
+	if (_p3.ctor === 'Err') {
+		return _elm_lang$core$Result$Err(_p3._0);
 	} else {
-		var _p5 = _p4._0;
-		return ((_elm_lang$core$Native_Utils.cmp(0, _p5) < 1) && (_elm_lang$core$Native_Utils.cmp(_p5, 255) < 1)) ? _elm_lang$core$Result$Ok(_p5) : _elm_lang$core$Result$Err('value not in range 0-255');
+		var _p4 = _p3._0;
+		return ((_elm_lang$core$Native_Utils.cmp(0, _p4) < 1) && (_elm_lang$core$Native_Utils.cmp(_p4, 255) < 1)) ? _elm_lang$core$Result$Ok(_p4) : _elm_lang$core$Result$Err('value not in range 0-255');
 	}
 };
 var _user$project$Main$ipStringToInt = function (i) {
@@ -8359,23 +8346,23 @@ var _user$project$Main$ipStringToInt = function (i) {
 	if (!_elm_lang$core$Native_Utils.eq(numParts, 4)) {
 		return _elm_lang$core$Result$Err('does not contain 4 dot-separated parts');
 	} else {
-		var _p6 = _elm_lang$core$List$head(
+		var _p5 = _elm_lang$core$List$head(
 			A2(_elm_lang$core$List$filter, _user$project$Main$isError, indexedPartResults));
-		if (_p6.ctor === 'Just') {
+		if (_p5.ctor === 'Just') {
 			return _elm_lang$core$Result$Err(
 				A2(
 					_elm_lang$core$Basics_ops['++'],
 					'part ',
 					A2(
 						_elm_lang$core$Basics_ops['++'],
-						_elm_lang$core$Basics$toString(_p6._0._0 + 1),
+						_elm_lang$core$Basics$toString(_p5._0._0 + 1),
 						A2(
 							_elm_lang$core$Basics_ops['++'],
 							': ',
 							function () {
-								var _p7 = _p6._0._1;
-								if (_p7.ctor === 'Err') {
-									return _p7._0;
+								var _p6 = _p5._0._1;
+								if (_p6.ctor === 'Err') {
+									return _p6._0;
 								} else {
 									return 'unknown failure';
 								}
@@ -8385,24 +8372,24 @@ var _user$project$Main$ipStringToInt = function (i) {
 				_elm_lang$core$List$sum(
 					A2(
 						_elm_lang$core$List$map,
-						function (_p8) {
-							var _p9 = _p8;
-							return _p9._1 * Math.pow(256, _p9._0);
+						function (_p7) {
+							var _p8 = _p7;
+							return _p8._1 * Math.pow(256, _p8._0);
 						},
 						A2(
 							_elm_lang$core$List$map,
-							function (_p10) {
-								var _p11 = _p10;
-								return {ctor: '_Tuple2', _0: (numParts - 1) - _p11._0, _1: _p11._1};
+							function (_p9) {
+								var _p10 = _p9;
+								return {ctor: '_Tuple2', _0: (numParts - 1) - _p10._0, _1: _p10._1};
 							},
 							A2(
 								_elm_lang$core$List$map,
-								function (_p12) {
-									var _p13 = _p12;
+								function (_p11) {
+									var _p12 = _p11;
 									return {
 										ctor: '_Tuple2',
-										_0: _p13._0,
-										_1: A2(_elm_lang$core$Result$withDefault, 0, _p13._1)
+										_0: _p12._0,
+										_1: A2(_elm_lang$core$Result$withDefault, 0, _p12._1)
 									};
 								},
 								indexedPartResults)))));
@@ -8433,26 +8420,50 @@ var _user$project$Main$subnetStringToCIDR = function (i) {
 				_elm_lang$core$Maybe$withDefault,
 				'',
 				_elm_lang$core$List$head(parts)));
-		var _p14 = {ctor: '_Tuple2', _0: ipResult, _1: netResult};
-		if (_p14._0.ctor === 'Ok') {
-			if (_p14._1.ctor === 'Ok') {
-				var _p15 = _p14._1._0;
-				return ((_elm_lang$core$Native_Utils.cmp(_p15, 0) > -1) && (_elm_lang$core$Native_Utils.cmp(_p15, 32) < 1)) ? _elm_lang$core$Result$Ok(
-					A2(_user$project$Main$CIDR, _p14._0._0, _p15)) : _elm_lang$core$Result$Err('mask value is out of range 0-32');
+		var _p13 = {ctor: '_Tuple2', _0: ipResult, _1: netResult};
+		if (_p13._0.ctor === 'Ok') {
+			if (_p13._1.ctor === 'Ok') {
+				var _p14 = _p13._1._0;
+				return ((_elm_lang$core$Native_Utils.cmp(_p14, 0) > -1) && (_elm_lang$core$Native_Utils.cmp(_p14, 32) < 1)) ? _elm_lang$core$Result$Ok(
+					A2(_user$project$Main$CIDR, _p13._0._0, _p14)) : _elm_lang$core$Result$Err('mask value is out of range 0-32');
 			} else {
 				return _elm_lang$core$Result$Err(
-					A2(_elm_lang$core$Basics_ops['++'], 'could not parse mask value: ', _p14._1._0));
+					A2(_elm_lang$core$Basics_ops['++'], 'could not parse mask value: ', _p13._1._0));
 			}
 		} else {
 			return _elm_lang$core$Result$Err(
-				A2(_elm_lang$core$Basics_ops['++'], 'could not parse ip value: ', _p14._0._0));
+				A2(_elm_lang$core$Basics_ops['++'], 'could not parse ip value: ', _p13._0._0));
 		}
 	}
 };
-var _user$project$Main$Model = function (a) {
-	return {rawData: a};
-};
-var _user$project$Main$model = _user$project$Main$Model('');
+var _user$project$Main$update = F2(
+	function (msg, model) {
+		var _p15 = msg;
+		if (_p15.ctor === 'Change') {
+			var _p16 = _p15._0;
+			return _elm_lang$core$Native_Utils.update(
+				model,
+				{
+					rawData: _p16,
+					result: _user$project$Main$subnetStringToCIDR(_p16)
+				});
+		} else {
+			return _elm_lang$core$Native_Utils.update(
+				model,
+				{
+					rawData: '',
+					result: _elm_lang$core$Result$Err('No input provided')
+				});
+		}
+	});
+var _user$project$Main$Model = F2(
+	function (a, b) {
+		return {rawData: a, result: b};
+	});
+var _user$project$Main$model = A2(
+	_user$project$Main$Model,
+	'',
+	_elm_lang$core$Result$Err('No input provided'));
 var _user$project$Main$Reset = {ctor: 'Reset'};
 var _user$project$Main$Change = function (a) {
 	return {ctor: 'Change', _0: a};
@@ -8486,55 +8497,246 @@ var _user$project$Main$view = function (model) {
 					{ctor: '[]'},
 					{
 						ctor: '::',
-						_0: function () {
-							var _p16 = _user$project$Main$subnetStringToCIDR(model.rawData);
-							if (_p16.ctor === 'Err') {
-								return _elm_lang$html$Html$text(
-									A2(_elm_lang$core$Basics_ops['++'], 'Error: ', _p16._0));
-							} else {
-								var _p17 = _p16._0;
-								return _elm_lang$html$Html$text(
-									A2(
-										_elm_lang$core$Basics_ops['++'],
-										_elm_lang$core$Basics$toString(_p17.anchorIP),
-										A2(
-											_elm_lang$core$Basics_ops['++'],
-											' ',
-											A2(
-												_elm_lang$core$Basics_ops['++'],
-												_elm_lang$core$Basics$toString(
-													_user$project$Main$ipIntToString(
-														_user$project$Main$maskShorthandToMaskInt(_p17.maskShorthand))),
-												A2(
-													_elm_lang$core$Basics_ops['++'],
-													' ',
-													A2(
-														_elm_lang$core$Basics_ops['++'],
-														_elm_lang$core$Basics$toString(
-															_user$project$Main$ipIntToString(_p17.anchorIP)),
-														A2(
-															_elm_lang$core$Basics_ops['++'],
-															' ',
-															A2(
-																_elm_lang$core$Basics_ops['++'],
-																_elm_lang$core$Basics$toString(
-																	_user$project$Main$ipIntToString(
-																		_user$project$Main$cidrToLowerBound(_p17))),
-																A2(
-																	_elm_lang$core$Basics_ops['++'],
-																	' ',
-																	A2(
-																		_elm_lang$core$Basics_ops['++'],
-																		_elm_lang$core$Basics$toString(
-																			_user$project$Main$ipIntToString(
-																				_user$project$Main$cidrToUpperBound(_p17))),
+						_0: A2(
+							_elm_lang$html$Html$table,
+							{ctor: '[]'},
+							function () {
+								var _p17 = model.result;
+								if (_p17.ctor === 'Err') {
+									return {
+										ctor: '::',
+										_0: A2(
+											_elm_lang$html$Html$tr,
+											{ctor: '[]'},
+											{
+												ctor: '::',
+												_0: A2(
+													_elm_lang$html$Html$th,
+													{ctor: '[]'},
+													{
+														ctor: '::',
+														_0: _elm_lang$html$Html$text('Error'),
+														_1: {ctor: '[]'}
+													}),
+												_1: {
+													ctor: '::',
+													_0: A2(
+														_elm_lang$html$Html$td,
+														{ctor: '[]'},
+														{
+															ctor: '::',
+															_0: _elm_lang$html$Html$text(_p17._0),
+															_1: {ctor: '[]'}
+														}),
+													_1: {ctor: '[]'}
+												}
+											}),
+										_1: {ctor: '[]'}
+									};
+								} else {
+									var _p18 = _p17._0;
+									return {
+										ctor: '::',
+										_0: A2(
+											_elm_lang$html$Html$tr,
+											{ctor: '[]'},
+											{
+												ctor: '::',
+												_0: A2(
+													_elm_lang$html$Html$th,
+													{ctor: '[]'},
+													{
+														ctor: '::',
+														_0: _elm_lang$html$Html$text('IP Address'),
+														_1: {ctor: '[]'}
+													}),
+												_1: {
+													ctor: '::',
+													_0: A2(
+														_elm_lang$html$Html$td,
+														{ctor: '[]'},
+														{
+															ctor: '::',
+															_0: A2(
+																_elm_lang$html$Html$code,
+																{ctor: '[]'},
+																{
+																	ctor: '::',
+																	_0: _elm_lang$html$Html$text(
 																		A2(
-																			_elm_lang$core$Basics_ops['++'],
-																			' ',
-																			_elm_lang$core$Basics$toString(
-																				_user$project$Main$cidrToNumAddresses(_p17)))))))))))));
-							}
-						}(),
+																			_elm_lang$core$Result$withDefault,
+																			'',
+																			_user$project$Main$ipIntToString(_p18.anchorIP))),
+																	_1: {ctor: '[]'}
+																}),
+															_1: {ctor: '[]'}
+														}),
+													_1: {ctor: '[]'}
+												}
+											}),
+										_1: {
+											ctor: '::',
+											_0: A2(
+												_elm_lang$html$Html$tr,
+												{ctor: '[]'},
+												{
+													ctor: '::',
+													_0: A2(
+														_elm_lang$html$Html$th,
+														{ctor: '[]'},
+														{
+															ctor: '::',
+															_0: _elm_lang$html$Html$text('Subnet Mask'),
+															_1: {ctor: '[]'}
+														}),
+													_1: {
+														ctor: '::',
+														_0: A2(
+															_elm_lang$html$Html$td,
+															{ctor: '[]'},
+															{
+																ctor: '::',
+																_0: A2(
+																	_elm_lang$html$Html$code,
+																	{ctor: '[]'},
+																	{
+																		ctor: '::',
+																		_0: _elm_lang$html$Html$text(
+																			A2(
+																				_elm_lang$core$Result$withDefault,
+																				'',
+																				_user$project$Main$ipIntToString(
+																					_user$project$Main$maskShorthandToMaskInt(_p18.maskShorthand)))),
+																		_1: {ctor: '[]'}
+																	}),
+																_1: {ctor: '[]'}
+															}),
+														_1: {ctor: '[]'}
+													}
+												}),
+											_1: {
+												ctor: '::',
+												_0: A2(
+													_elm_lang$html$Html$tr,
+													{ctor: '[]'},
+													{
+														ctor: '::',
+														_0: A2(
+															_elm_lang$html$Html$th,
+															{ctor: '[]'},
+															{
+																ctor: '::',
+																_0: _elm_lang$html$Html$text('Number of addresses'),
+																_1: {ctor: '[]'}
+															}),
+														_1: {
+															ctor: '::',
+															_0: A2(
+																_elm_lang$html$Html$td,
+																{ctor: '[]'},
+																{
+																	ctor: '::',
+																	_0: A2(
+																		_elm_lang$html$Html$code,
+																		{ctor: '[]'},
+																		{
+																			ctor: '::',
+																			_0: _elm_lang$html$Html$text(
+																				_elm_lang$core$Basics$toString(
+																					_user$project$Main$cidrToNumAddresses(_p18))),
+																			_1: {ctor: '[]'}
+																		}),
+																	_1: {ctor: '[]'}
+																}),
+															_1: {ctor: '[]'}
+														}
+													}),
+												_1: {
+													ctor: '::',
+													_0: A2(
+														_elm_lang$html$Html$tr,
+														{ctor: '[]'},
+														{
+															ctor: '::',
+															_0: A2(
+																_elm_lang$html$Html$th,
+																{ctor: '[]'},
+																{
+																	ctor: '::',
+																	_0: _elm_lang$html$Html$text('Lower IP'),
+																	_1: {ctor: '[]'}
+																}),
+															_1: {
+																ctor: '::',
+																_0: A2(
+																	_elm_lang$html$Html$td,
+																	{ctor: '[]'},
+																	{
+																		ctor: '::',
+																		_0: A2(
+																			_elm_lang$html$Html$code,
+																			{ctor: '[]'},
+																			{
+																				ctor: '::',
+																				_0: _elm_lang$html$Html$text(
+																					_elm_lang$core$Basics$toString(
+																						_user$project$Main$ipIntToString(
+																							_user$project$Main$cidrToLowerBound(_p18)))),
+																				_1: {ctor: '[]'}
+																			}),
+																		_1: {ctor: '[]'}
+																	}),
+																_1: {ctor: '[]'}
+															}
+														}),
+													_1: {
+														ctor: '::',
+														_0: A2(
+															_elm_lang$html$Html$tr,
+															{ctor: '[]'},
+															{
+																ctor: '::',
+																_0: A2(
+																	_elm_lang$html$Html$th,
+																	{ctor: '[]'},
+																	{
+																		ctor: '::',
+																		_0: _elm_lang$html$Html$text('Upper IP'),
+																		_1: {ctor: '[]'}
+																	}),
+																_1: {
+																	ctor: '::',
+																	_0: A2(
+																		_elm_lang$html$Html$td,
+																		{ctor: '[]'},
+																		{
+																			ctor: '::',
+																			_0: A2(
+																				_elm_lang$html$Html$code,
+																				{ctor: '[]'},
+																				{
+																					ctor: '::',
+																					_0: _elm_lang$html$Html$text(
+																						A2(
+																							_elm_lang$core$Result$withDefault,
+																							'',
+																							_user$project$Main$ipIntToString(
+																								_user$project$Main$cidrToUpperBound(_p18)))),
+																					_1: {ctor: '[]'}
+																				}),
+																			_1: {ctor: '[]'}
+																		}),
+																	_1: {ctor: '[]'}
+																}
+															}),
+														_1: {ctor: '[]'}
+													}
+												}
+											}
+										}
+									};
+								}
+							}()),
 						_1: {ctor: '[]'}
 					}),
 				_1: {
