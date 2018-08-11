@@ -1,9 +1,10 @@
 module Main exposing (..)
 
-import Html exposing (Html, div, input, text, button, pre)
+import Html exposing (Html, div, input, text, button, pre, textarea)
 import Html.Attributes exposing (..)
 import Html.Events exposing (onInput, onClick)
 import Html
+import Regex
 import Base64
 
 
@@ -29,6 +30,11 @@ type Msg
     | Reset
 
 
+strim : String -> String
+strim i =
+    Regex.replace Regex.All (Regex.regex "\\s") (\_ -> "") i
+
+
 update : Msg -> Model -> Model
 update msg model =
     case msg of
@@ -36,7 +42,7 @@ update msg model =
             { model
                 | rawData = newData
                 , formattedData =
-                    (case (Base64.decode newData) of
+                    (case (Base64.decode (strim newData)) of
                         Ok o ->
                             o
 
@@ -55,7 +61,7 @@ update msg model =
 view : Model -> Html Msg
 view model =
     div []
-        [ input
+        [ textarea
             [ placeholder "Base64 Content"
             , onInput Change
             , value model.rawData
