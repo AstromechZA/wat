@@ -129,15 +129,12 @@ subnetStringToCIDR i =
 
 ipIntToString : Int -> Result String String
 ipIntToString i =
-    if i < 0 || i > 4294967295 then
-        Err "out of range"
-    else
-        List.range 0 3
-            |> List.map (\x -> (Bitwise.shiftRightZfBy (x * 8) i) % 256)
-            |> List.reverse
-            |> List.map Basics.toString
-            |> String.join "."
-            |> Ok
+    List.range 0 3
+        |> List.map (\x -> (Bitwise.shiftRightZfBy (x * 8) i) % 256)
+        |> List.reverse
+        |> List.map Basics.toString
+        |> String.join "."
+        |> Ok
 
 
 maskShorthandToMaskInt : Int -> Int
@@ -157,7 +154,7 @@ cidrToLowerBound c =
 
 cidrToUpperBound : CIDR -> Int
 cidrToUpperBound c =
-    (cidrToLowerBound c) + (cidrToNumAddresses c)
+    (cidrToLowerBound c) + (cidrToNumAddresses c) - 1
 
 
 cidrToNumAddresses : CIDR -> Int
@@ -246,7 +243,7 @@ view model =
                                 [ text "Lower IP"
                                 ]
                             , td []
-                                [ code [] [ text (Basics.toString (ipIntToString (cidrToLowerBound c))) ]
+                                [ code [] [ text (Result.withDefault "" (ipIntToString (cidrToLowerBound c))) ]
                                 ]
                             ]
                         , tr []
