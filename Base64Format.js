@@ -8953,21 +8953,32 @@ var _truqu$elm_base64$Base64_Encode$encode = function (input) {
 var _truqu$elm_base64$Base64$decode = _truqu$elm_base64$Base64_Decode$decode;
 var _truqu$elm_base64$Base64$encode = _truqu$elm_base64$Base64_Encode$encode;
 
+var _user$project$Main$strim = function (i) {
+	return A4(
+		_elm_lang$core$Regex$replace,
+		_elm_lang$core$Regex$All,
+		_elm_lang$core$Regex$regex('\\s'),
+		function (_p0) {
+			return '';
+		},
+		i);
+};
 var _user$project$Main$update = F2(
 	function (msg, model) {
-		var _p0 = msg;
-		if (_p0.ctor === 'Change') {
-			var _p2 = _p0._0;
+		var _p1 = msg;
+		if (_p1.ctor === 'Change') {
+			var _p3 = _p1._0;
 			return _elm_lang$core$Native_Utils.update(
 				model,
 				{
-					rawData: _p2,
+					rawData: _p3,
 					formattedData: function () {
-						var _p1 = _truqu$elm_base64$Base64$decode(_p2);
-						if (_p1.ctor === 'Ok') {
-							return _p1._0;
+						var _p2 = _truqu$elm_base64$Base64$decode(
+							_user$project$Main$strim(_p3));
+						if (_p2.ctor === 'Ok') {
+							return _p2._0;
 						} else {
-							return A2(_elm_lang$core$Basics_ops['++'], 'Error: ', _p1._0);
+							return A2(_elm_lang$core$Basics_ops['++'], 'Error: ', _p2._0);
 						}
 					}()
 				});
@@ -8993,7 +9004,7 @@ var _user$project$Main$view = function (model) {
 		{
 			ctor: '::',
 			_0: A2(
-				_elm_lang$html$Html$input,
+				_elm_lang$html$Html$textarea,
 				{
 					ctor: '::',
 					_0: _elm_lang$html$Html_Attributes$placeholder('Base64 Content'),
