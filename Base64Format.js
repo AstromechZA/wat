@@ -5779,6 +5779,143 @@ var _elm_lang$core$Bitwise$xor = _elm_lang$core$Native_Bitwise.xor;
 var _elm_lang$core$Bitwise$or = _elm_lang$core$Native_Bitwise.or;
 var _elm_lang$core$Bitwise$and = _elm_lang$core$Native_Bitwise.and;
 
+//import Maybe, Native.List //
+
+var _elm_lang$core$Native_Regex = function() {
+
+function escape(str)
+{
+	return str.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+}
+function caseInsensitive(re)
+{
+	return new RegExp(re.source, 'gi');
+}
+function regex(raw)
+{
+	return new RegExp(raw, 'g');
+}
+
+function contains(re, string)
+{
+	return string.match(re) !== null;
+}
+
+function find(n, re, str)
+{
+	n = n.ctor === 'All' ? Infinity : n._0;
+	var out = [];
+	var number = 0;
+	var string = str;
+	var lastIndex = re.lastIndex;
+	var prevLastIndex = -1;
+	var result;
+	while (number++ < n && (result = re.exec(string)))
+	{
+		if (prevLastIndex === re.lastIndex) break;
+		var i = result.length - 1;
+		var subs = new Array(i);
+		while (i > 0)
+		{
+			var submatch = result[i];
+			subs[--i] = submatch === undefined
+				? _elm_lang$core$Maybe$Nothing
+				: _elm_lang$core$Maybe$Just(submatch);
+		}
+		out.push({
+			match: result[0],
+			submatches: _elm_lang$core$Native_List.fromArray(subs),
+			index: result.index,
+			number: number
+		});
+		prevLastIndex = re.lastIndex;
+	}
+	re.lastIndex = lastIndex;
+	return _elm_lang$core$Native_List.fromArray(out);
+}
+
+function replace(n, re, replacer, string)
+{
+	n = n.ctor === 'All' ? Infinity : n._0;
+	var count = 0;
+	function jsReplacer(match)
+	{
+		if (count++ >= n)
+		{
+			return match;
+		}
+		var i = arguments.length - 3;
+		var submatches = new Array(i);
+		while (i > 0)
+		{
+			var submatch = arguments[i];
+			submatches[--i] = submatch === undefined
+				? _elm_lang$core$Maybe$Nothing
+				: _elm_lang$core$Maybe$Just(submatch);
+		}
+		return replacer({
+			match: match,
+			submatches: _elm_lang$core$Native_List.fromArray(submatches),
+			index: arguments[arguments.length - 2],
+			number: count
+		});
+	}
+	return string.replace(re, jsReplacer);
+}
+
+function split(n, re, str)
+{
+	n = n.ctor === 'All' ? Infinity : n._0;
+	if (n === Infinity)
+	{
+		return _elm_lang$core$Native_List.fromArray(str.split(re));
+	}
+	var string = str;
+	var result;
+	var out = [];
+	var start = re.lastIndex;
+	var restoreLastIndex = re.lastIndex;
+	while (n--)
+	{
+		if (!(result = re.exec(string))) break;
+		out.push(string.slice(start, result.index));
+		start = re.lastIndex;
+	}
+	out.push(string.slice(start));
+	re.lastIndex = restoreLastIndex;
+	return _elm_lang$core$Native_List.fromArray(out);
+}
+
+return {
+	regex: regex,
+	caseInsensitive: caseInsensitive,
+	escape: escape,
+
+	contains: F2(contains),
+	find: F3(find),
+	replace: F4(replace),
+	split: F3(split)
+};
+
+}();
+
+var _elm_lang$core$Regex$split = _elm_lang$core$Native_Regex.split;
+var _elm_lang$core$Regex$replace = _elm_lang$core$Native_Regex.replace;
+var _elm_lang$core$Regex$find = _elm_lang$core$Native_Regex.find;
+var _elm_lang$core$Regex$contains = _elm_lang$core$Native_Regex.contains;
+var _elm_lang$core$Regex$caseInsensitive = _elm_lang$core$Native_Regex.caseInsensitive;
+var _elm_lang$core$Regex$regex = _elm_lang$core$Native_Regex.regex;
+var _elm_lang$core$Regex$escape = _elm_lang$core$Native_Regex.escape;
+var _elm_lang$core$Regex$Match = F4(
+	function (a, b, c, d) {
+		return {match: a, submatches: b, index: c, number: d};
+	});
+var _elm_lang$core$Regex$Regex = {ctor: 'Regex'};
+var _elm_lang$core$Regex$AtMost = function (a) {
+	return {ctor: 'AtMost', _0: a};
+};
+var _elm_lang$core$Regex$All = {ctor: 'All'};
+
 var _elm_lang$virtual_dom$VirtualDom_Debug$wrap;
 var _elm_lang$virtual_dom$VirtualDom_Debug$wrapWithFlags;
 
@@ -8282,188 +8419,569 @@ var _elm_lang$html$Html_Events$Options = F2(
 		return {stopPropagation: a, preventDefault: b};
 	});
 
-var _user$project$Main$maskShorthandToSize = function (i) {
-	return Math.pow(2, 32 - i);
+var _truqu$elm_base64$Base64_Decode$charToInt = function ($char) {
+	var _p0 = $char;
+	switch (_p0.valueOf()) {
+		case 'A':
+			return 0;
+		case 'B':
+			return 1;
+		case 'C':
+			return 2;
+		case 'D':
+			return 3;
+		case 'E':
+			return 4;
+		case 'F':
+			return 5;
+		case 'G':
+			return 6;
+		case 'H':
+			return 7;
+		case 'I':
+			return 8;
+		case 'J':
+			return 9;
+		case 'K':
+			return 10;
+		case 'L':
+			return 11;
+		case 'M':
+			return 12;
+		case 'N':
+			return 13;
+		case 'O':
+			return 14;
+		case 'P':
+			return 15;
+		case 'Q':
+			return 16;
+		case 'R':
+			return 17;
+		case 'S':
+			return 18;
+		case 'T':
+			return 19;
+		case 'U':
+			return 20;
+		case 'V':
+			return 21;
+		case 'W':
+			return 22;
+		case 'X':
+			return 23;
+		case 'Y':
+			return 24;
+		case 'Z':
+			return 25;
+		case 'a':
+			return 26;
+		case 'b':
+			return 27;
+		case 'c':
+			return 28;
+		case 'd':
+			return 29;
+		case 'e':
+			return 30;
+		case 'f':
+			return 31;
+		case 'g':
+			return 32;
+		case 'h':
+			return 33;
+		case 'i':
+			return 34;
+		case 'j':
+			return 35;
+		case 'k':
+			return 36;
+		case 'l':
+			return 37;
+		case 'm':
+			return 38;
+		case 'n':
+			return 39;
+		case 'o':
+			return 40;
+		case 'p':
+			return 41;
+		case 'q':
+			return 42;
+		case 'r':
+			return 43;
+		case 's':
+			return 44;
+		case 't':
+			return 45;
+		case 'u':
+			return 46;
+		case 'v':
+			return 47;
+		case 'w':
+			return 48;
+		case 'x':
+			return 49;
+		case 'y':
+			return 50;
+		case 'z':
+			return 51;
+		case '0':
+			return 52;
+		case '1':
+			return 53;
+		case '2':
+			return 54;
+		case '3':
+			return 55;
+		case '4':
+			return 56;
+		case '5':
+			return 57;
+		case '6':
+			return 58;
+		case '7':
+			return 59;
+		case '8':
+			return 60;
+		case '9':
+			return 61;
+		case '+':
+			return 62;
+		case '/':
+			return 63;
+		default:
+			return 0;
+	}
 };
-var _user$project$Main$cidrToNumAddresses = function (c) {
-	return _user$project$Main$maskShorthandToSize(c.maskShorthand);
+var _truqu$elm_base64$Base64_Decode$intToString = function ($int) {
+	if (_elm_lang$core$Native_Utils.cmp($int, 65536) < 1) {
+		return _elm_lang$core$String$fromChar(
+			_elm_lang$core$Char$fromCode($int));
+	} else {
+		var c = $int - 65536;
+		return _elm_lang$core$String$fromList(
+			{
+				ctor: '::',
+				_0: _elm_lang$core$Char$fromCode(55296 | (c >>> 10)),
+				_1: {
+					ctor: '::',
+					_0: _elm_lang$core$Char$fromCode(56320 | (1023 & c)),
+					_1: {ctor: '[]'}
+				}
+			});
+	}
 };
-var _user$project$Main$maskShorthandToMaskInt = function (i) {
-	return 4294967295 - (Math.pow(2, 32 - i) - 1);
+var _truqu$elm_base64$Base64_Decode$add = F2(
+	function ($char, _p1) {
+		var _p2 = _p1;
+		var _p4 = _p2._2;
+		var _p3 = _p2._1;
+		var shiftAndAdd = function ($int) {
+			return (63 & $int) | (_p2._0 << 6);
+		};
+		return _elm_lang$core$Native_Utils.eq(_p3, 0) ? (_elm_lang$core$Native_Utils.eq(128 & $char, 0) ? {
+			ctor: '_Tuple3',
+			_0: 0,
+			_1: 0,
+			_2: A2(
+				_elm_lang$core$Basics_ops['++'],
+				_p4,
+				_truqu$elm_base64$Base64_Decode$intToString($char))
+		} : (_elm_lang$core$Native_Utils.eq(224 & $char, 192) ? {ctor: '_Tuple3', _0: 31 & $char, _1: 1, _2: _p4} : (_elm_lang$core$Native_Utils.eq(240 & $char, 224) ? {ctor: '_Tuple3', _0: 15 & $char, _1: 2, _2: _p4} : {ctor: '_Tuple3', _0: 7 & $char, _1: 3, _2: _p4}))) : (_elm_lang$core$Native_Utils.eq(_p3, 1) ? {
+			ctor: '_Tuple3',
+			_0: 0,
+			_1: 0,
+			_2: A2(
+				_elm_lang$core$Basics_ops['++'],
+				_p4,
+				_truqu$elm_base64$Base64_Decode$intToString(
+					shiftAndAdd($char)))
+		} : {
+			ctor: '_Tuple3',
+			_0: shiftAndAdd($char),
+			_1: _p3 - 1,
+			_2: _p4
+		});
+	});
+var _truqu$elm_base64$Base64_Decode$toUTF16 = F2(
+	function ($char, acc) {
+		return {
+			ctor: '_Tuple3',
+			_0: 0,
+			_1: 0,
+			_2: A2(
+				_truqu$elm_base64$Base64_Decode$add,
+				255 & ($char >>> 0),
+				A2(
+					_truqu$elm_base64$Base64_Decode$add,
+					255 & ($char >>> 8),
+					A2(_truqu$elm_base64$Base64_Decode$add, 255 & ($char >>> 16), acc)))
+		};
+	});
+var _truqu$elm_base64$Base64_Decode$chomp = F2(
+	function (char_, _p5) {
+		var _p6 = _p5;
+		var _p10 = _p6._2;
+		var _p9 = _p6._0;
+		var _p8 = _p6._1;
+		var $char = _truqu$elm_base64$Base64_Decode$charToInt(char_);
+		var _p7 = _p8;
+		if (_p7 === 3) {
+			return A2(_truqu$elm_base64$Base64_Decode$toUTF16, _p9 | $char, _p10);
+		} else {
+			return {ctor: '_Tuple3', _0: ($char << ((3 - _p8) * 6)) | _p9, _1: _p8 + 1, _2: _p10};
+		}
+	});
+var _truqu$elm_base64$Base64_Decode$initial = {
+	ctor: '_Tuple3',
+	_0: 0,
+	_1: 0,
+	_2: {ctor: '_Tuple3', _0: 0, _1: 0, _2: ''}
 };
-var _user$project$Main$cidrToLowerBound = function (c) {
-	return c.anchorIP & _user$project$Main$maskShorthandToMaskInt(c.maskShorthand);
+var _truqu$elm_base64$Base64_Decode$wrapUp = function (_p11) {
+	var _p12 = _p11;
+	return (_elm_lang$core$Native_Utils.cmp(_p12._2._1, 0) > 0) ? _elm_lang$core$Result$Err('Invalid UTF-16') : _elm_lang$core$Result$Ok(_p12._2._2);
 };
-var _user$project$Main$cidrToUpperBound = function (c) {
-	return (_user$project$Main$cidrToLowerBound(c) + _user$project$Main$cidrToNumAddresses(c)) - 1;
+var _truqu$elm_base64$Base64_Decode$stripNulls = F2(
+	function (input, output) {
+		return A2(_elm_lang$core$String$endsWith, '==', input) ? A2(_elm_lang$core$String$dropRight, 2, output) : (A2(_elm_lang$core$String$endsWith, '=', input) ? A2(_elm_lang$core$String$dropRight, 1, output) : output);
+	});
+var _truqu$elm_base64$Base64_Decode$validBase64Regex = _elm_lang$core$Regex$regex('^([A-Za-z0-9\\/+]{4})*([A-Za-z0-9\\/+]{2}[A-Za-z0-9\\/+=]{2})?$');
+var _truqu$elm_base64$Base64_Decode$validate = function (input) {
+	return A2(_elm_lang$core$Regex$contains, _truqu$elm_base64$Base64_Decode$validBase64Regex, input) ? _elm_lang$core$Result$Ok(input) : _elm_lang$core$Result$Err('Invalid base64');
 };
-var _user$project$Main$ipIntToString = function (i) {
-	return _elm_lang$core$Result$Ok(
+var _truqu$elm_base64$Base64_Decode$pad = function (input) {
+	var _p13 = A2(
+		_elm_lang$core$Basics$rem,
+		_elm_lang$core$String$length(input),
+		4);
+	switch (_p13) {
+		case 3:
+			return A2(_elm_lang$core$Basics_ops['++'], input, '=');
+		case 2:
+			return A2(_elm_lang$core$Basics_ops['++'], input, '==');
+		default:
+			return input;
+	}
+};
+var _truqu$elm_base64$Base64_Decode$validateAndDecode = function (input) {
+	return A2(
+		_elm_lang$core$Result$map,
+		_truqu$elm_base64$Base64_Decode$stripNulls(input),
 		A2(
-			_elm_lang$core$String$join,
-			'.',
+			_elm_lang$core$Result$andThen,
+			function (_p14) {
+				return _truqu$elm_base64$Base64_Decode$wrapUp(
+					A3(_elm_lang$core$String$foldl, _truqu$elm_base64$Base64_Decode$chomp, _truqu$elm_base64$Base64_Decode$initial, _p14));
+			},
+			_truqu$elm_base64$Base64_Decode$validate(input)));
+};
+var _truqu$elm_base64$Base64_Decode$decode = function (_p15) {
+	return _truqu$elm_base64$Base64_Decode$validateAndDecode(
+		_truqu$elm_base64$Base64_Decode$pad(_p15));
+};
+
+var _truqu$elm_base64$Base64_Encode$intToBase64 = function (i) {
+	var _p0 = i;
+	switch (_p0) {
+		case 0:
+			return 'A';
+		case 1:
+			return 'B';
+		case 2:
+			return 'C';
+		case 3:
+			return 'D';
+		case 4:
+			return 'E';
+		case 5:
+			return 'F';
+		case 6:
+			return 'G';
+		case 7:
+			return 'H';
+		case 8:
+			return 'I';
+		case 9:
+			return 'J';
+		case 10:
+			return 'K';
+		case 11:
+			return 'L';
+		case 12:
+			return 'M';
+		case 13:
+			return 'N';
+		case 14:
+			return 'O';
+		case 15:
+			return 'P';
+		case 16:
+			return 'Q';
+		case 17:
+			return 'R';
+		case 18:
+			return 'S';
+		case 19:
+			return 'T';
+		case 20:
+			return 'U';
+		case 21:
+			return 'V';
+		case 22:
+			return 'W';
+		case 23:
+			return 'X';
+		case 24:
+			return 'Y';
+		case 25:
+			return 'Z';
+		case 26:
+			return 'a';
+		case 27:
+			return 'b';
+		case 28:
+			return 'c';
+		case 29:
+			return 'd';
+		case 30:
+			return 'e';
+		case 31:
+			return 'f';
+		case 32:
+			return 'g';
+		case 33:
+			return 'h';
+		case 34:
+			return 'i';
+		case 35:
+			return 'j';
+		case 36:
+			return 'k';
+		case 37:
+			return 'l';
+		case 38:
+			return 'm';
+		case 39:
+			return 'n';
+		case 40:
+			return 'o';
+		case 41:
+			return 'p';
+		case 42:
+			return 'q';
+		case 43:
+			return 'r';
+		case 44:
+			return 's';
+		case 45:
+			return 't';
+		case 46:
+			return 'u';
+		case 47:
+			return 'v';
+		case 48:
+			return 'w';
+		case 49:
+			return 'x';
+		case 50:
+			return 'y';
+		case 51:
+			return 'z';
+		case 52:
+			return '0';
+		case 53:
+			return '1';
+		case 54:
+			return '2';
+		case 55:
+			return '3';
+		case 56:
+			return '4';
+		case 57:
+			return '5';
+		case 58:
+			return '6';
+		case 59:
+			return '7';
+		case 60:
+			return '8';
+		case 61:
+			return '9';
+		case 62:
+			return '+';
+		default:
+			return '/';
+	}
+};
+var _truqu$elm_base64$Base64_Encode$toBase64 = function ($int) {
+	return A2(
+		_elm_lang$core$Basics_ops['++'],
+		_truqu$elm_base64$Base64_Encode$intToBase64(63 & ($int >>> 18)),
+		A2(
+			_elm_lang$core$Basics_ops['++'],
+			_truqu$elm_base64$Base64_Encode$intToBase64(63 & ($int >>> 12)),
 			A2(
-				_elm_lang$core$List$map,
-				_elm_lang$core$Basics$toString,
-				_elm_lang$core$List$reverse(
+				_elm_lang$core$Basics_ops['++'],
+				_truqu$elm_base64$Base64_Encode$intToBase64(63 & ($int >>> 6)),
+				_truqu$elm_base64$Base64_Encode$intToBase64(63 & ($int >>> 0)))));
+};
+var _truqu$elm_base64$Base64_Encode$add = F2(
+	function ($char, _p1) {
+		var _p2 = _p1;
+		var _p5 = _p2._0;
+		var _p4 = _p2._1;
+		var current = (_p2._2 << 8) | $char;
+		var _p3 = _p4;
+		if (_p3 === 2) {
+			return {
+				ctor: '_Tuple3',
+				_0: A2(
+					_elm_lang$core$Basics_ops['++'],
+					_p5,
+					_truqu$elm_base64$Base64_Encode$toBase64(current)),
+				_1: 0,
+				_2: 0
+			};
+		} else {
+			return {ctor: '_Tuple3', _0: _p5, _1: _p4 + 1, _2: current};
+		}
+	});
+var _truqu$elm_base64$Base64_Encode$chomp = F2(
+	function (char_, _p6) {
+		var _p7 = _p6;
+		var _p9 = _p7._1;
+		var $char = _elm_lang$core$Char$toCode(char_);
+		var _p8 = _p7._0;
+		if (_p8.ctor === 'Nothing') {
+			return (_elm_lang$core$Native_Utils.cmp($char, 128) < 0) ? {
+				ctor: '_Tuple2',
+				_0: _elm_lang$core$Maybe$Nothing,
+				_1: A2(_truqu$elm_base64$Base64_Encode$add, $char, _p9)
+			} : ((_elm_lang$core$Native_Utils.cmp($char, 2048) < 0) ? {
+				ctor: '_Tuple2',
+				_0: _elm_lang$core$Maybe$Nothing,
+				_1: A2(
+					_truqu$elm_base64$Base64_Encode$add,
+					128 | (63 & $char),
+					A2(_truqu$elm_base64$Base64_Encode$add, 192 | ($char >>> 6), _p9))
+			} : (((_elm_lang$core$Native_Utils.cmp($char, 55296) < 0) || (_elm_lang$core$Native_Utils.cmp($char, 57344) > -1)) ? {
+				ctor: '_Tuple2',
+				_0: _elm_lang$core$Maybe$Nothing,
+				_1: A2(
+					_truqu$elm_base64$Base64_Encode$add,
+					128 | (63 & $char),
 					A2(
-						_elm_lang$core$List$map,
-						function (x) {
-							return A2(_elm_lang$core$Basics_ops['%'], i >>> (x * 8), 256);
-						},
-						A2(_elm_lang$core$List$range, 0, 3))))));
-};
-var _user$project$Main$isError = function (_p0) {
-	var _p1 = _p0;
-	var _p2 = _p1._1;
-	if (_p2.ctor === 'Err') {
-		return true;
-	} else {
-		return false;
-	}
-};
-var _user$project$Main$parseIpSegment = function (i) {
-	var _p3 = _elm_lang$core$String$toInt(i);
-	if (_p3.ctor === 'Err') {
-		return _elm_lang$core$Result$Err(_p3._0);
-	} else {
-		var _p4 = _p3._0;
-		return ((_elm_lang$core$Native_Utils.cmp(0, _p4) < 1) && (_elm_lang$core$Native_Utils.cmp(_p4, 255) < 1)) ? _elm_lang$core$Result$Ok(_p4) : _elm_lang$core$Result$Err('value not in range 0-255');
-	}
-};
-var _user$project$Main$ipStringToInt = function (i) {
-	var indexedPartResults = A2(
-		_elm_lang$core$List$indexedMap,
-		F2(
-			function (v0, v1) {
-				return {ctor: '_Tuple2', _0: v0, _1: v1};
-			}),
-		A2(
-			_elm_lang$core$List$map,
-			_user$project$Main$parseIpSegment,
-			A2(_elm_lang$core$String$split, '.', i)));
-	var numParts = _elm_lang$core$List$length(indexedPartResults);
-	if (!_elm_lang$core$Native_Utils.eq(numParts, 4)) {
-		return _elm_lang$core$Result$Err('does not contain 4 dot-separated parts');
-	} else {
-		var _p5 = _elm_lang$core$List$head(
-			A2(_elm_lang$core$List$filter, _user$project$Main$isError, indexedPartResults));
-		if (_p5.ctor === 'Just') {
-			return _elm_lang$core$Result$Err(
+						_truqu$elm_base64$Base64_Encode$add,
+						128 | (63 & ($char >>> 6)),
+						A2(_truqu$elm_base64$Base64_Encode$add, 224 | ($char >>> 12), _p9)))
+			} : {
+				ctor: '_Tuple2',
+				_0: _elm_lang$core$Maybe$Just($char),
+				_1: _p9
+			}));
+		} else {
+			var combined = A2(
+				F2(
+					function (x, y) {
+						return x + y;
+					}),
+				65536,
+				(1023 & $char) | ((1023 & _p8._0) << 10));
+			return {
+				ctor: '_Tuple2',
+				_0: _elm_lang$core$Maybe$Nothing,
+				_1: A2(
+					_truqu$elm_base64$Base64_Encode$add,
+					128 | (63 & combined),
+					A2(
+						_truqu$elm_base64$Base64_Encode$add,
+						128 | (63 & (combined >>> 6)),
+						A2(
+							_truqu$elm_base64$Base64_Encode$add,
+							128 | (63 & (combined >>> 12)),
+							A2(_truqu$elm_base64$Base64_Encode$add, 240 | (combined >>> 18), _p9))))
+			};
+		}
+	});
+var _truqu$elm_base64$Base64_Encode$wrapUp = function (_p10) {
+	var _p11 = _p10;
+	var _p14 = _p11._1._0;
+	var _p13 = _p11._1._2;
+	var _p12 = _p11._1._1;
+	switch (_p12) {
+		case 1:
+			return A2(
+				_elm_lang$core$Basics_ops['++'],
+				_p14,
 				A2(
 					_elm_lang$core$Basics_ops['++'],
-					'part ',
+					_truqu$elm_base64$Base64_Encode$intToBase64(63 & (_p13 >>> 2)),
 					A2(
 						_elm_lang$core$Basics_ops['++'],
-						_elm_lang$core$Basics$toString(_p5._0._0 + 1),
+						_truqu$elm_base64$Base64_Encode$intToBase64(63 & (_p13 << 4)),
+						'==')));
+		case 2:
+			return A2(
+				_elm_lang$core$Basics_ops['++'],
+				_p14,
+				A2(
+					_elm_lang$core$Basics_ops['++'],
+					_truqu$elm_base64$Base64_Encode$intToBase64(63 & (_p13 >>> 10)),
+					A2(
+						_elm_lang$core$Basics_ops['++'],
+						_truqu$elm_base64$Base64_Encode$intToBase64(63 & (_p13 >>> 4)),
 						A2(
 							_elm_lang$core$Basics_ops['++'],
-							': ',
-							function () {
-								var _p6 = _p5._0._1;
-								if (_p6.ctor === 'Err') {
-									return _p6._0;
-								} else {
-									return 'unknown failure';
-								}
-							}()))));
-		} else {
-			return _elm_lang$core$Result$Ok(
-				_elm_lang$core$List$sum(
-					A2(
-						_elm_lang$core$List$map,
-						function (_p7) {
-							var _p8 = _p7;
-							return _p8._1 * Math.pow(256, _p8._0);
-						},
-						A2(
-							_elm_lang$core$List$map,
-							function (_p9) {
-								var _p10 = _p9;
-								return {ctor: '_Tuple2', _0: (numParts - 1) - _p10._0, _1: _p10._1};
-							},
-							A2(
-								_elm_lang$core$List$map,
-								function (_p11) {
-									var _p12 = _p11;
-									return {
-										ctor: '_Tuple2',
-										_0: _p12._0,
-										_1: A2(_elm_lang$core$Result$withDefault, 0, _p12._1)
-									};
-								},
-								indexedPartResults)))));
-		}
+							_truqu$elm_base64$Base64_Encode$intToBase64(63 & (_p13 << 2)),
+							'='))));
+		default:
+			return _p14;
 	}
 };
-var _user$project$Main$CIDR = F2(
-	function (a, b) {
-		return {anchorIP: a, maskShorthand: b};
-	});
-var _user$project$Main$subnetStringToCIDR = function (i) {
-	var parts = A2(_elm_lang$core$String$split, '/', i);
-	var numParts = _elm_lang$core$List$length(parts);
-	if (!_elm_lang$core$Native_Utils.eq(numParts, 2)) {
-		return _elm_lang$core$Result$Err('must contain exactly one /');
-	} else {
-		var netResult = _elm_lang$core$String$toInt(
-			A2(
-				_elm_lang$core$Maybe$withDefault,
-				'',
-				_elm_lang$core$List$head(
-					A2(
-						_elm_lang$core$Maybe$withDefault,
-						{ctor: '[]'},
-						_elm_lang$core$List$tail(parts)))));
-		var ipResult = _user$project$Main$ipStringToInt(
-			A2(
-				_elm_lang$core$Maybe$withDefault,
-				'',
-				_elm_lang$core$List$head(parts)));
-		var _p13 = {ctor: '_Tuple2', _0: ipResult, _1: netResult};
-		if (_p13._0.ctor === 'Ok') {
-			if (_p13._1.ctor === 'Ok') {
-				var _p14 = _p13._1._0;
-				return ((_elm_lang$core$Native_Utils.cmp(_p14, 0) > -1) && (_elm_lang$core$Native_Utils.cmp(_p14, 32) < 1)) ? _elm_lang$core$Result$Ok(
-					A2(_user$project$Main$CIDR, _p13._0._0, _p14)) : _elm_lang$core$Result$Err('mask value is out of range 0-32');
-			} else {
-				return _elm_lang$core$Result$Err(
-					A2(_elm_lang$core$Basics_ops['++'], 'could not parse mask value: ', _p13._1._0));
-			}
-		} else {
-			return _elm_lang$core$Result$Err(
-				A2(_elm_lang$core$Basics_ops['++'], 'could not parse ip value: ', _p13._0._0));
-		}
-	}
+var _truqu$elm_base64$Base64_Encode$initial = {
+	ctor: '_Tuple2',
+	_0: _elm_lang$core$Maybe$Nothing,
+	_1: {ctor: '_Tuple3', _0: '', _1: 0, _2: 0}
 };
+var _truqu$elm_base64$Base64_Encode$encode = function (input) {
+	return _truqu$elm_base64$Base64_Encode$wrapUp(
+		A3(_elm_lang$core$String$foldl, _truqu$elm_base64$Base64_Encode$chomp, _truqu$elm_base64$Base64_Encode$initial, input));
+};
+
+var _truqu$elm_base64$Base64$decode = _truqu$elm_base64$Base64_Decode$decode;
+var _truqu$elm_base64$Base64$encode = _truqu$elm_base64$Base64_Encode$encode;
+
 var _user$project$Main$update = F2(
 	function (msg, model) {
-		var _p15 = msg;
-		if (_p15.ctor === 'Change') {
-			var _p16 = _p15._0;
+		var _p0 = msg;
+		if (_p0.ctor === 'Change') {
+			var _p2 = _p0._0;
 			return _elm_lang$core$Native_Utils.update(
 				model,
 				{
-					rawData: _p16,
-					result: _user$project$Main$subnetStringToCIDR(_p16)
+					rawData: _p2,
+					formattedData: function () {
+						var _p1 = _truqu$elm_base64$Base64$decode(_p2);
+						if (_p1.ctor === 'Ok') {
+							return _p1._0;
+						} else {
+							return A2(_elm_lang$core$Basics_ops['++'], 'Error: ', _p1._0);
+						}
+					}()
 				});
 		} else {
 			return _elm_lang$core$Native_Utils.update(
 				model,
-				{
-					rawData: '',
-					result: _elm_lang$core$Result$Err('No input provided')
-				});
+				{rawData: '', formattedData: ''});
 		}
 	});
 var _user$project$Main$Model = F2(
 	function (a, b) {
-		return {rawData: a, result: b};
+		return {rawData: a, formattedData: b};
 	});
-var _user$project$Main$model = A2(
-	_user$project$Main$Model,
-	'',
-	_elm_lang$core$Result$Err('No input provided'));
+var _user$project$Main$model = A2(_user$project$Main$Model, '', '');
 var _user$project$Main$Reset = {ctor: 'Reset'};
 var _user$project$Main$Change = function (a) {
 	return {ctor: 'Change', _0: a};
@@ -8478,7 +8996,7 @@ var _user$project$Main$view = function (model) {
 				_elm_lang$html$Html$input,
 				{
 					ctor: '::',
-					_0: _elm_lang$html$Html_Attributes$placeholder('1.2.3.4/24'),
+					_0: _elm_lang$html$Html_Attributes$placeholder('Base64 Content'),
 					_1: {
 						ctor: '::',
 						_0: _elm_lang$html$Html_Events$onInput(_user$project$Main$Change),
@@ -8493,252 +9011,15 @@ var _user$project$Main$view = function (model) {
 			_1: {
 				ctor: '::',
 				_0: A2(
-					_elm_lang$html$Html$div,
-					{ctor: '[]'},
+					_elm_lang$html$Html$pre,
 					{
 						ctor: '::',
-						_0: A2(
-							_elm_lang$html$Html$table,
-							{ctor: '[]'},
-							function () {
-								var _p17 = model.result;
-								if (_p17.ctor === 'Err') {
-									return {
-										ctor: '::',
-										_0: A2(
-											_elm_lang$html$Html$tr,
-											{ctor: '[]'},
-											{
-												ctor: '::',
-												_0: A2(
-													_elm_lang$html$Html$th,
-													{ctor: '[]'},
-													{
-														ctor: '::',
-														_0: _elm_lang$html$Html$text('Error'),
-														_1: {ctor: '[]'}
-													}),
-												_1: {
-													ctor: '::',
-													_0: A2(
-														_elm_lang$html$Html$td,
-														{ctor: '[]'},
-														{
-															ctor: '::',
-															_0: _elm_lang$html$Html$text(_p17._0),
-															_1: {ctor: '[]'}
-														}),
-													_1: {ctor: '[]'}
-												}
-											}),
-										_1: {ctor: '[]'}
-									};
-								} else {
-									var _p18 = _p17._0;
-									return {
-										ctor: '::',
-										_0: A2(
-											_elm_lang$html$Html$tr,
-											{ctor: '[]'},
-											{
-												ctor: '::',
-												_0: A2(
-													_elm_lang$html$Html$th,
-													{ctor: '[]'},
-													{
-														ctor: '::',
-														_0: _elm_lang$html$Html$text('IP Address'),
-														_1: {ctor: '[]'}
-													}),
-												_1: {
-													ctor: '::',
-													_0: A2(
-														_elm_lang$html$Html$td,
-														{ctor: '[]'},
-														{
-															ctor: '::',
-															_0: A2(
-																_elm_lang$html$Html$code,
-																{ctor: '[]'},
-																{
-																	ctor: '::',
-																	_0: _elm_lang$html$Html$text(
-																		A2(
-																			_elm_lang$core$Result$withDefault,
-																			'',
-																			_user$project$Main$ipIntToString(_p18.anchorIP))),
-																	_1: {ctor: '[]'}
-																}),
-															_1: {ctor: '[]'}
-														}),
-													_1: {ctor: '[]'}
-												}
-											}),
-										_1: {
-											ctor: '::',
-											_0: A2(
-												_elm_lang$html$Html$tr,
-												{ctor: '[]'},
-												{
-													ctor: '::',
-													_0: A2(
-														_elm_lang$html$Html$th,
-														{ctor: '[]'},
-														{
-															ctor: '::',
-															_0: _elm_lang$html$Html$text('Subnet Mask'),
-															_1: {ctor: '[]'}
-														}),
-													_1: {
-														ctor: '::',
-														_0: A2(
-															_elm_lang$html$Html$td,
-															{ctor: '[]'},
-															{
-																ctor: '::',
-																_0: A2(
-																	_elm_lang$html$Html$code,
-																	{ctor: '[]'},
-																	{
-																		ctor: '::',
-																		_0: _elm_lang$html$Html$text(
-																			A2(
-																				_elm_lang$core$Result$withDefault,
-																				'',
-																				_user$project$Main$ipIntToString(
-																					_user$project$Main$maskShorthandToMaskInt(_p18.maskShorthand)))),
-																		_1: {ctor: '[]'}
-																	}),
-																_1: {ctor: '[]'}
-															}),
-														_1: {ctor: '[]'}
-													}
-												}),
-											_1: {
-												ctor: '::',
-												_0: A2(
-													_elm_lang$html$Html$tr,
-													{ctor: '[]'},
-													{
-														ctor: '::',
-														_0: A2(
-															_elm_lang$html$Html$th,
-															{ctor: '[]'},
-															{
-																ctor: '::',
-																_0: _elm_lang$html$Html$text('Number of addresses'),
-																_1: {ctor: '[]'}
-															}),
-														_1: {
-															ctor: '::',
-															_0: A2(
-																_elm_lang$html$Html$td,
-																{ctor: '[]'},
-																{
-																	ctor: '::',
-																	_0: A2(
-																		_elm_lang$html$Html$code,
-																		{ctor: '[]'},
-																		{
-																			ctor: '::',
-																			_0: _elm_lang$html$Html$text(
-																				_elm_lang$core$Basics$toString(
-																					_user$project$Main$cidrToNumAddresses(_p18))),
-																			_1: {ctor: '[]'}
-																		}),
-																	_1: {ctor: '[]'}
-																}),
-															_1: {ctor: '[]'}
-														}
-													}),
-												_1: {
-													ctor: '::',
-													_0: A2(
-														_elm_lang$html$Html$tr,
-														{ctor: '[]'},
-														{
-															ctor: '::',
-															_0: A2(
-																_elm_lang$html$Html$th,
-																{ctor: '[]'},
-																{
-																	ctor: '::',
-																	_0: _elm_lang$html$Html$text('Lower IP'),
-																	_1: {ctor: '[]'}
-																}),
-															_1: {
-																ctor: '::',
-																_0: A2(
-																	_elm_lang$html$Html$td,
-																	{ctor: '[]'},
-																	{
-																		ctor: '::',
-																		_0: A2(
-																			_elm_lang$html$Html$code,
-																			{ctor: '[]'},
-																			{
-																				ctor: '::',
-																				_0: _elm_lang$html$Html$text(
-																					A2(
-																						_elm_lang$core$Result$withDefault,
-																						'',
-																						_user$project$Main$ipIntToString(
-																							_user$project$Main$cidrToLowerBound(_p18)))),
-																				_1: {ctor: '[]'}
-																			}),
-																		_1: {ctor: '[]'}
-																	}),
-																_1: {ctor: '[]'}
-															}
-														}),
-													_1: {
-														ctor: '::',
-														_0: A2(
-															_elm_lang$html$Html$tr,
-															{ctor: '[]'},
-															{
-																ctor: '::',
-																_0: A2(
-																	_elm_lang$html$Html$th,
-																	{ctor: '[]'},
-																	{
-																		ctor: '::',
-																		_0: _elm_lang$html$Html$text('Upper IP'),
-																		_1: {ctor: '[]'}
-																	}),
-																_1: {
-																	ctor: '::',
-																	_0: A2(
-																		_elm_lang$html$Html$td,
-																		{ctor: '[]'},
-																		{
-																			ctor: '::',
-																			_0: A2(
-																				_elm_lang$html$Html$code,
-																				{ctor: '[]'},
-																				{
-																					ctor: '::',
-																					_0: _elm_lang$html$Html$text(
-																						A2(
-																							_elm_lang$core$Result$withDefault,
-																							'',
-																							_user$project$Main$ipIntToString(
-																								_user$project$Main$cidrToUpperBound(_p18)))),
-																					_1: {ctor: '[]'}
-																				}),
-																			_1: {ctor: '[]'}
-																		}),
-																	_1: {ctor: '[]'}
-																}
-															}),
-														_1: {ctor: '[]'}
-													}
-												}
-											}
-										}
-									};
-								}
-							}()),
+						_0: _elm_lang$html$Html_Attributes$id('base64_result_box'),
+						_1: {ctor: '[]'}
+					},
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html$text(model.formattedData),
 						_1: {ctor: '[]'}
 					}),
 				_1: {

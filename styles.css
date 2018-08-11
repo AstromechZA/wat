@@ -5,3 +5,7 @@ pre {
 #json_result_box {
     white-space: pre-line;
 }
+
+#base64_result_box {
+    white-space: pre-line;
+}
